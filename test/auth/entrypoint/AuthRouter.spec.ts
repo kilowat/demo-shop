@@ -51,5 +51,21 @@ describe('AuthRouter', () => {
     });
   })
 
+  it('should create user and return token', async() => {
+    let email = 'mail@may.com';
+    let name = 'John';
+    let password = 'pass123';
+    let type = 'email'; 
+    await request(app)
+    .post('/auth/signup')
+    .send({email: email, password: password, auth_type: type, name: name})
+    .set('Accept', 'application/json')
+    .expect('Content-type', /json/)
+    .expect(200)
+    .then((res) => {
+      expect(res.body.auth_token).to.not.be.empty;
+    });
+  })
+
 });
 
