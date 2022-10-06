@@ -12,12 +12,12 @@ describe('AuthRouter', () => {
   let app: express.Application;
 
   const user = {
-    email: 'baller@gg.com',
-    id: '1234',
-    name: 'Ken',
-    password: '$2b$10$K0HEqyYUlQLaj.Xkp9tDzuRclzJqdKCYV7gEHtSVIlu8NRtLM6flC',
-    type: 'email',
-  };
+    email: 'tester@gmail.com',
+    id: '1556',
+    name: 'Ren',
+    password: '',
+    auth_type: 'google',
+  }
 
   beforeEach(() => {
     repository = new FakeRepository();
@@ -33,18 +33,27 @@ describe('AuthRouter', () => {
   });
 
   it("should return 404 when user is not found", async() => {
+    const user = {
+      email: 'wrongemail@gg.com',
+      id: '1234',
+      name: 'Ken',
+      password: 'pass123',
+      auth_type: 'email',
+    }
     await request(app)
     .post('/auth/signin')
-    .send({})
+    .send({name: user.name, email: user.email, password: user.password, auth_type: user.auth_type, })
+    .set('Accept', 'application/json')
+    .expect('Content-type', 'application/json; charset=utf-8')
     .expect(404); 
   });
 
   it('should return 200 and token when user is found', async() => {
     await request(app)
     .post('/auth/signin')
-    .send({email: user.email, password: user.password})
+    .send({name: user.name, email: user.email, password: user.password, auth_type: user.auth_type, })
     .set('Accept', 'application/json')
-    .expect('Content-type', /json/)
+    .expect('Content-type', 'application/json; charset=utf-8')
     .expect(200)
     .then((res) => {
       expect(res.body.auth_token).to.not.be.empty;
@@ -52,10 +61,10 @@ describe('AuthRouter', () => {
   })
 
   it('should create user and return token', async() => {
-    let email = 'mail@may.com';
-    let name = 'John';
-    let password = 'pass123';
-    let type = 'email'; 
+    let email = 'my@email.com'
+    let name = 'test user'
+    let password = 'pass123'
+    let type = 'email'
     await request(app)
     .post('/auth/signup')
     .send({email: email, password: password, auth_type: type, name: name})

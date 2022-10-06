@@ -30,23 +30,22 @@ describe("AuthRepository",() => {
     const name = 'Ken';
     const type = 'email';
     const email = 'baller@gg.com';
-    const password = '$2b$10$K0HEqyYUlQLaj.Xkp9tDzuRclzJqdKCYV7gEHtSVIlu8NRtLM6flC';
+    const password = 'pasword123';
 
     const result = await sut.add(
       name,
       email,
-      password,
       type,
+      password,
     );
 
     expect(result).to.not.be.empty;
   });
 
   it('should return user id', async () => {
-    const email = 'email@test.ru';
-    const password = 'pass';
+    const email = 'baller@gg.com';
 
-    const result = sut.find(email);
+    const result = await sut.find(email);
 
     expect(result).to.not.be.empty;
 

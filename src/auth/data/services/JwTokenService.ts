@@ -1,23 +1,24 @@
-import ITokentService from "../../services/ITokenService";
-import jwt from 'jsonwebtoken';
-export default class JwTokenService implements ITokentService {
+import jwt from 'jsonwebtoken'
+import ITokenService from '../../services/ITokenService'
+
+export default class JwtTokenService implements ITokenService {
   constructor(private readonly privateKey: string) {}
 
-  encode(paload: string | object): string | object {
-    const token = jwt.sign({ data: paload }, this.privateKey, {
-      issuer: 'com.myapp',
-      expiresIn: '1h',
-    });
+  encode(payload: string | object): string | object {
+    let token = jwt.sign({ data: payload }, this.privateKey, {
+      issuer: 'com.foodapp',
+      expiresIn: '1y',
+      algorithm: 'HS256',
+    })
 
-    return token;
+    return token
   }
   decode(token: string): string | object {
     try {
-      const decoded = jwt.verify(token, this.privateKey);
-      return decoded;
+      const decoded = jwt.verify(token, this.privateKey)
+      return decoded
     } catch (err) {
-      return 'Invalid token';
+      return ''
     }
   }
-
 }

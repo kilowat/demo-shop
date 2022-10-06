@@ -29,13 +29,20 @@ describe('SigninUsecase', () => {
   });
 
   it('should throw error if user not find', async () => {
-    const user = {email: 'wrong@email.com', password: '1234'};
-    await expect(sut.execute(user.email, user.password)).to.be.rejectedWith('User not found');
+    const user = {name: 'John', email: 'wrong@email.com', password: '1234'};
+    await expect(sut.execute(user.name, user.email, user.password, 'email')).to.be.rejectedWith('User not found');
   });
 
   it('should return user id when user email and password is correct', async () => {
-    const id = await sut.execute(user.email, user.password);
-    expect(id).to.be.equal(user.id);
+    //act
+    const id = await sut.execute(
+      user.name,
+      user.email,
+      user.password,
+      user.type
+    )
+    //assert
+    expect(id).to.be.equal(user.id)
   });
 
 });

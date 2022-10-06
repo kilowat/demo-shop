@@ -12,16 +12,29 @@ export default class AuthRepository implements IAuthRepository{
     
     if (!user) return Promise.reject('User not found');
 
-    return new User(user.id, user.name, user.email, user.password, user.type);
+    return new User(
+      user.id,
+       user.name, user.email, 
+       user.password ?? '', 
+       user.type);
   }
-  public async add(name: string, email: string, passwordHash: string, type: string): Promise<string> {
+  public async add(
+    name: string,
+    email: string, 
+    type: string,
+    passwordHash?: string
+    ): Promise<string> {
     const userModel = this.getUserModel();
-    const savedUser = await userModel.create({
+    const savedUser = new userModel({
       name: name,
       email: email,
       type: type,
       password: passwordHash,
     })
+
+    if (passwordHash) savedUser.password = passwordHash;
+
+    await savedUser.save();
 
     return savedUser.id;
   }

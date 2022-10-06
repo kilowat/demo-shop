@@ -5,8 +5,7 @@ import * as express from 'express';
 import AuthController from "./AuthController";
 import SigninUsecase from "../usecases/SigninUsecase";
 import SignupUseCase from "../usecases/SignUpUsecase";
-import { signupValidationRules, validate } from "../helpers/Validators";
-import { Request, Response } from "express-serve-static-core";
+import { signinValidationRules, signupValidationRules, validate } from "../helpers/Validators";
 
 export default class AuthRouter {
   public static configure(
@@ -20,9 +19,19 @@ export default class AuthRouter {
       tokenService,
       passwordService,
     );
-    router.post('/signin', (req, res) => controller.signin(req, res));
-    router.post('/signup', signupValidationRules(), validate, (req: express.Request, res: express.Response) => 
-      controller.signup(req, res)
+    router.post(
+      '/signin',
+       signinValidationRules(), 
+       validate, 
+       (req: express.Request, res: express.Response) => 
+        controller.signin(req, res));
+
+    router.post(
+      '/signup',
+       signupValidationRules(),
+        validate,
+         (req: express.Request, res: express.Response) => 
+          controller.signup(req, res)
     );
 
     return router;

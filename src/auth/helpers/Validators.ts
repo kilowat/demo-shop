@@ -6,9 +6,24 @@ export const signupValidationRules = () => {
     body('name', 'Name is required').notEmpty(),
     body('email', 'Invalid email').notEmpty().isEmail().normalizeEmail(),
     body('auth_type', 'Auth type is required').notEmpty(),
-    body('password', 'Password is required (min 5 characters)').notEmpty()
+    body('password', 'Password is required (min 5 characters)')
     .if(body('auth_type').equals('email'))
-    .isLength({ min: 5 }),
+    .notEmpty()
+    .isLength({ min: 3 }),
+  ];
+}
+
+export const signinValidationRules = () => {
+  return [
+    body('name', 'Name is required')
+      .notEmpty()
+      .if(body('auth_type').not().equals('email')),
+    body('email', 'Invalid email').notEmpty().isEmail().normalizeEmail(),
+    body('auth_type', 'Auth type is required').notEmpty(),
+    body('password', 'Password is required (min 5 characters)')
+      .if(body('auth_type').equals('email'))
+      .notEmpty()
+      .isLength({ min: 3 }),
   ];
 }
 
