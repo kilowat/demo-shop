@@ -31,6 +31,7 @@ export default class SigninUsecase{
     if (user) return user.id;
 
     const userId = await this.authRepository.add(name, email, type);
+    
     return userId;
   }
 }
