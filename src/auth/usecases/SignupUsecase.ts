@@ -16,7 +16,7 @@ export default class SignupUseCase {
       const user = await this.authRepository.find(email).catch((_) => null);
       if (user) return Promise.reject('User already exists');
       
-      let  passwordHash;
+      let passwordHash;
       if (password) {
         passwordHash = await this.passwordService.hash(password);
       } else {
